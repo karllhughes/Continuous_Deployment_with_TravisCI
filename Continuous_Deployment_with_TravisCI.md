@@ -8,10 +8,10 @@ The principal benefit of this process is that it creates a release process that 
 
 
 ### What is Travis CI? Why use it for CI/CD?
-Travis CI is a continuous integration platform that allows automatically building, testing and deploying whenever code changes are committed to an application. It is also used to manage automatic deployment and notifications. Open source projects on Travis are free!
+Travis CI is a continuous integration platform that allows automatically building, testing and deploying, whenever code changes are committed to an application. It is also used to manage automatic deployment and notifications. Open source projects on Travis are free!
 
 ### Why use Fly?
-Fly is a docker based platform as a service (Paas) that allows you deploy applications that need to run globally. Fly delivers your application with low latency to users wherever they are in the world. Fly, being location-smart, enables you to scale your application at the location where your users are busiest. You can deploy most applications with multiple platforms/languages to Fly. All you need to do is to build your application, package it as a Docker image and deploy to Fly.
+Fly is a docker based platform as a service (Paas) that allows you deploy applications that need to run globally. Fly delivers your application with low latency to users wherever they are in the world. Fly, being location-smart, enables you to scale your application at the location where your users are busiest. You can deploy most applications with multiple platforms/languages to Fly. All you need to do is build your application, package it as a Docker image and deploy to Fly.
 
 
 ## Installation
@@ -23,7 +23,7 @@ To follow this tutorial, make sure you have:
 - [Docker](https://docs.docker.com/get-docker/) installed.
 
 ### Install FlyCtl
-Flyctl is a command-line utility that makes it easier to manage Fly apps. From sign in -to deploying to Fly.
+Flyctl is a command-line utility that makes it easier to manage Fly apps, from sign in, -to deploying on Fly.
 
 ##### On Mac
 ```
@@ -45,47 +45,45 @@ Flyctl is a command-line utility that makes it easier to manage Fly apps. From s
 ### Creating a new app
 
 The next step is to create a new app. We are going to use a sample app from Github. 
-1. Fork [hellofly](https://github.com/fly-examples/hellofly) to your own repository if you use Github.
+1. Fork [flygreeting](https://github.com/fly-examples/flygreeting) to your own repository if you use Github.
 
 2. If you are using Git, you can clone the repository to your local machine by using the following command:
     ```
-    ~ $ git clone git@github.com:fly-examples/hellofly.git
+    ~ $ git clone git@github.com:fly-examples/flygreeting.git
 
-    ~ $ cd hellofly
+    ~ $ cd flygreeting
     ```
 
     If you use Bitbucket, you can `git push` the cloned repository to your Bitbucket account.
 
-3. After downloading the project, take a look at the `.gitignore` file in the `hellofly` application, and remove the line with `fly.toml` from the file. We need this file removed because it needs to be pushed to Github. It's an important file for deployment to Fly.
-
 #### Sign up
-If you are signing up to use fly for the first time use the following command
+If you are signing up to use Fly for the first time use the following command:
 ```
 ~ $ flyctl auth signup
 ```
 
 #### Sign in
-If you are signing in on the other hand, simply run
+If you are signing in on the other hand, simply run:
 ```
 ~ $ flyctl auth login
 ```
 
 ### Testing your app locally
-Before deployment, it is best practice to make sure that your application works fine locally. For our `hellofly` app, to test it locally, all we need to do is to build the application image, and then run it as a container. Ensure you have Docker desktop installed, and that you are in the `hellofly` app directory to proceed.
+Before deployment, it is best practice to make sure that your application works fine locally. For our `flygreeting` app, to test it locally, all we need to do is build the application image, and then run it as a container. Ensure you have Docker desktop installed, and that you are in the `flygreeting` app directory to proceed.
 
 1. #### Build the Application Image
+    Make sure Docker is running, then run:
     ```
-    ~ $ docker build -t hellofly .
+    ~ $ docker build -t flygreeting .
     ```
-
 
 2. #### Run it as a Docker container
     ```
-    ~ $ docker run -p 8000:8080 hellofly
+    ~ $ docker run -p 8000:8080 -d flygreeting
     ```
 
 3. #### Check that the app works
-    Visit your application in the browser at http://localhost:8000. You should see your hellofly application up and running. Once you are satisfied that the application works correctly, you can stop the container by running `Ctrl C` or `Command C` as the case may be.
+    Visit your application in the browser at http://localhost:8000/v1/countries. You should see your flygreeting application up and running. Once you are satisfied that the application works correctly, you can stop the container by running `Ctrl C` or `Command C` as the case may be.
 
 
 ### Creating the Fly Configuration file
@@ -94,9 +92,9 @@ Every Fly application makes use of the `fly.toml` file to manage deployment. The
 ~ $ flyctl apps create
 ```
 
-The command creates an interactive session which requests for things like the 'App name' and 'Organization name'. The App name is expected to be a unique name. You can leave the App name blank if you want a unique Fly autogenerated name to avoid namespace collisions. Fly will also reserve the app name on the platform, for when you deploy.
+The command creates an interactive session which requests for things like the 'App name' and 'Organization name'. The App name is expected to be a unique name. You can type in a unique App name or leave it blank if you want a unique Fly autogenerated name to avoid namespace collisions. Fly will also reserve the app name on the platform, for when you deploy.
 
- By the end of the session you should have a `fly.toml` file in your app directory; with a varied App name that looks something like the following:
+ By the end of the session, you should have a `fly.toml` file in your app directory; with a varied App name that looks something like the following:
 
  ```
 # fly.toml file generated for morning-frost-7191 on 2020-07-25T15:09:20+01:00
@@ -129,56 +127,71 @@ app = "morning-frost-7191"
 ### Connect Travis CI to Github
 1. Visit [Travis-ci.com](https://travis-ci.com/) and sign in with Github
 2. You will be redirected to Github, where you will be required to authorize Travis CI to use your Github account.
-3. You will then be redirected back to Travis CI where you will be able to select which repositories Travis CI has access to.
-4. Select hellofly as one of the repositories.
+3. You will then be redirected back to Travis CI, where you will be able to select which repositories Travis CI has access to.
+4. Select flygreeting as one of the repositories.
 
 ### Connect Travis CI to Bitbucket
 1. Visit [Travis-ci.com](https://travis-ci.com/) and sign in with Bitbucket
 2. You will be redirected to Bitbucket, Grant Travis CI access to your Bitbucket account
-3. You will be redirected back to Travis CI where you will be able to select which repositories Travis CI has access to.
-4. Select hellofly as one of the repositories.
+3. You will be redirected back to Travis CI, where you will be able to select which repositories Travis CI has access to.
+4. Select flygreeting as one of the repositories.
 
 ### Connect Fly to Travis CI
 1. In order for Travis CI to automate deployment to Fly, we need to authorize it. We can do this by getting a Fly API token and adding it to Travis.
 
-2. Get a Fly API token with the command 
+2. Get a Fly API token with the command: 
     ```
     ~ $ flyctl auth token
     ```
 
 3. Copy the generated API code.
 4. Visit the Travis Dashboard, by the upper right corner, click your profile avatar and select [Settings](https://travis-ci.com/account/repositories)
-5. On the Repositories tab, you should see the `hellofly` repository listed. Click the settings button in front of it.
+5. On the Repositories tab, you should see the `flygreeting` repository listed. Click the settings button in front of it.
 6. Navigate to the Enviroment Variables section
 7. Create a variable by setting `FLY_API_TOKEN` as the name, and the previously generated API code copied above, as the value. 
 8. Click the Add button to save.
 
 ### Configuring Travis CI for deployment
-Travis CI requires a configuration file named `.travis.yml`. This file contains a set of defined instructions on how Travis CI should manage deployment. These instructions are then followed by travis one after the other. They can be made up of anything -- testing, building, installation or deployment instructions. For the purpose of this tutorial, we are going to add only deployment instructions to our `.travis.yml` file.
+Travis CI requires a configuration file named `.travis.yml`. This file contains a set of defined instructions on how Travis CI should manage deployment. These instructions are then followed by travis one after the other. They can be made up of anything -- testing, building, installation or deployment instructions. For the purpose of this tutorial, we are going to add only testing and deployment instructions to our `.travis.yml` file.
 1. Create a `.travis.yml` file
 2. Populate it with the following example
 
     ```
     language: go
+    go:
+        - 1.14
+
+    script:
+        - go test -v
 
     deploy: 
         provider: script
         script: bash scripts/deploy.sh
         on:
-            branch: master
+            branch: main
     ```
-3. By adding the `language: go`  section, we are telling Travis CI that the language used in our `hellofly` application is Go
-4. In the deploy section, the provider is  given a value of script, because we are going to detail the steps for deployment in the `scripts/deploy.sh` file.
-5. ```
+3. By adding the `language: go`  section, we are telling Travis CI that the language used in our `flygreeting` application is Go
+4. Then we specify the go version required for the flygreeting app.
+    ```
+    go:
+        - 1.14
+    ```
+5. The script section instructs Travis CI to run the application tests. If the tests fail at this stage, the whole build fails.
+    ```
+    script:
+        - go test -v
+    ```
+6. In the deploy section, the provider is given a value of script, because we are going to detail the steps for deployment in the `scripts/deploy.sh` file.
+7. ```
      on:
-        branch: master
+        branch: main
     ```
-    This tells travis to deploy to Fly, once new code changes have been introduced to the master branch.
-6. The next step is to create our `deploy.sh` script.
+    This tells Travis to deploy to Fly, once new code changes have been introduced to the `main` branch. The branch name, in other applications, could as well be `master` or `develop`. We use `main` in the `.travis.yml` file, because this is the branch name of our flygreeting app.
+8. The next step is creating our `deploy.sh` script.
     ```
-    ~ $ mkdir script && touch script/deploy.sh
+    ~ $ mkdir scripts && touch scripts/deploy.sh
     ```
-7. Open the newly created `deploy.sh` in an editor and enter the following lines
+9. Open the newly created `deploy.sh` in an editor and enter the following lines
     ```
     #!/bin/sh -l
 
@@ -195,13 +208,13 @@ Travis CI requires a configuration file named `.travis.yml`. This file contains 
 
     echo "Successfully Installed Flyctl"
     ```
-    Then we set the environmental variables that makes it possible to use the shortcut `flyctl` command.
+    Then we set the environmental variables that make it possible to use the shortcut `flyctl` command.
 
     ```
     # deploy app
     sh -c "flyctl deploy"
     ```
-    This is where the real magic of deployment happens. Here we tell Travis to deploy the `hellofly` application to Fly using our `fly.toml` file.
+    This is where the real magic of deployment happens. Here, we tell Travis to deploy the `flygreeting` application to Fly using our `fly.toml` file.
 
     ```
     # get app Information
@@ -237,18 +250,20 @@ Travis CI requires a configuration file named `.travis.yml`. This file contains 
 ## Deployment
 
 ### Deploying to Fly with Travis CI
-1. Before you push your changes, make sure to save all files, add and commit them with git.
-2. Then push your changes to the master branch of your Github/Bitbucket `hellofly` repository
+1. Before you push your changes, make sure to save all files, add and commit them with Git.
+2. Then push your changes to the `main` branch of your Github/Bitbucket `flygreeting` repository
 3. We expect our deployment to Fly to have commenced by now. 
 4. We can monitor the progress by going to the [Travis CI Dashboard](https://travis-ci.com/dashboard).
-5. On the Active Repositories tab, you should see hellofly listed. Selecting it should take you to the deployment log, which details every step of the deployment.
-6. To open the `hellofly` app, simply run the following command in the `hellofly` directory on your local machine.
+5. On the Active Repositories tab, you should see flygreeting listed. Selecting it should take you to the deployment log, which details every step of the deployment.
+6. Once the Travis CI build has completed successfully, open the `flygreeting` app in the browser, by simply running the following command in the `flygreeting` directory on your local machine.
     ```
     ~ $ flyctl open
     ```
+    Once the page is open, append the route: `/v1/countries` to the page url to view the countries list in the app.
 
 ## Conclusion
 This tutorial has only covered the basics of what is possible with Fly and Travis as far as continuous deployment is concerned. You have learnt how to use the flyctl CLI tool, connect your favorite version control platform to Travis, configure Travis for Fly, and deploy to Fly. 
+
 At the end of this tutorial, you now have a functioning application that you deployed to Fly automatically just by pushing your code to Github/Bitbucket!
 
 ### Further reading
