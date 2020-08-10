@@ -9,7 +9,8 @@ The principal benefit of this process is that it creates a release process that 
 [Fly](https://fly.io/) is a Docker-based platform as a service (PaaS) that allows you to deploy globally-distributed applications on the edge. Being location-aware, Fly enables you to serve your application from the edge node closest to your users. Most applications that can be packaged as a Docker image can be deployed to Fly.
 
 ## How to Configure Travis CI to Deploy Your Application to Fly
-In this tutorial, you’ll...
+
+In this tutorial, you’ll learn how to deploy an application to Fly.io using Travis CI. You’ll see how to connect your application’s repository, and walk through the steps to configure Travis CI to build and deploy your application to Fly.
 
 ### Prerequisites
 
@@ -112,7 +113,7 @@ deploy:
 This tells Travis CI that our application uses [Go 1.14](https://golang.org/). Travis will use its [Go environment](https://docs.travis-ci.com/user/languages/go/) to run the script, `go test -v` specified. If the tests fail, the whole build fails. Finally, the `deploy` section instructs Travis to run the `scripts/deploy.sh` file if the build passes on the `main` branch.
 
 ### Writing the Deployment Script
-Next, create a deploy script to installs and run the Flyctl command-line tool on the Travis CI virtual environment after the build succeeds. Create a new directory called `scripts` with a file called `deploy.sh` inside:
+Next, create a deploy script to install and run the Flyctl command-line tool on the Travis CI virtual environment after the build succeeds. Create a new directory called `scripts` with a file called `deploy.sh` inside:
 
 ```
 mkdir scripts && touch scripts/deploy.sh
@@ -181,3 +182,4 @@ In this tutorial, you’ve learned how to test and deploy a simple Go applicatio
 Further documentation for concepts and commands discussed in this guide are available here:
 - [Flyctl CLI Reference](https://fly.io/docs/flyctl/)
 - [Travis Script Deployment](https://docs.travis-ci.com/user/deployment/script/)
+
